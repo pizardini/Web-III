@@ -8,10 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="spring-mvc" />
+        <module name="mercado" />
+        <module name="spring-gateway-zuul" />
         <module name="pagamento" />
         <module name="rxjava" />
         <module name="ada-966-webflux" />
-        <module name="mercado" />
         <module name="base" />
       </profile>
     </annotationProcessing>
@@ -22,6 +23,7 @@
       <module name="mercado" target="17" />
       <module name="pagamento" target="17" />
       <module name="rxjava" target="17" />
+      <module name="spring-gateway-zuul" target="17" />
       <module name="spring-mvc" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -32,6 +34,7 @@
       <module name="mercado" options="-parameters" />
       <module name="pagamento" options="-parameters" />
       <module name="rxjava" options="-parameters" />
+      <module name="spring-gateway-zuul" options="-parameters" />
       <module name="spring-mvc" options="-parameters" />
     </option>
   </component>
