@@ -18,9 +18,17 @@ public class PagamentoService {
         this.transacaoRepository = transacaoRepository;
     }
 
+
+
     public Mono<Comprovante> pagar(Pagamento pagamento) {
 
         WebClient webClient = WebClient.create("http://localhost:8080");
+
+    Mono<Usuario> pagadorMono = webClient.get()
+            .uri("/users/{username}", pagamento.getPagador())
+            .retrieve()
+            .bodyToMono(Usuario.class);
+
         Flux<Usuario> usuarios = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/users/usernames") // http://..users/usernames?users=bob,alice
@@ -28,13 +36,11 @@ public class PagamentoService {
                         .build())
                 .retrieve().bodyToFlux(Usuario.class);
 
-        usuarios.flatMap(u -> {
-            log.error(u.getUsername() + " : " + u.getBalance());
-            return null;
-        }).subscribe(u -> {
-            log.error(u.getUsername() + " : " + u.getBalance());
-            return null;
-        });
+//        return pagadorMono
+//                .flatMap(pagador -> {
+//                    if (pagador.getBalance() >= pagamento.getValor()) {
+//
+//                    }
 
         Mono<Comprovante> comprovanteMono = Flux.zip(usuarios, usuarios.skip(1))
                 .map(tupla -> new Transacao(

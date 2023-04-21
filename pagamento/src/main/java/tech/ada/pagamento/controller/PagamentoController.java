@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import tech.ada.pagamento.model.Comprovante;
+import tech.ada.pagamento.model.Conta;
 import tech.ada.pagamento.model.Pagamento;
 import tech.ada.pagamento.service.PagamentoService;
 

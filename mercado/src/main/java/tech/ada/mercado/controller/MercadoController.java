@@ -36,6 +36,13 @@ public class MercadoController {
                 .switchIfEmpty(Mono.just(ResponseEntity.noContent().build()));
     }
 
+    @GetMapping("/valor")
+    public Mono<ResponseEntity<Double>> valorAtual() {
+        return service.pegarValor()
+                .map(valor -> ResponseEntity.ok(valor))
+                .switchIfEmpty(Mono.error(() -> new MercadoNotFoundException("Não encontrado")));
+    }
+
     @GetMapping("/{id}")
     public Mono<ResponseEntity<Mercado>> getById(@PathVariable String id) {
         return service.buscarPorId(id)
