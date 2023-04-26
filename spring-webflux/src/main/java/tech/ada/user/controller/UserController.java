@@ -1,7 +1,7 @@
 package tech.ada.user.controller;
 
 import org.springframework.http.MediaType;
-import tech.ada.pagamento.model.Test;
+
 import tech.ada.user.exception.UserNotFoundException;
 import tech.ada.user.model.User;
 import tech.ada.user.service.UserService;

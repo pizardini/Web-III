@@ -24,10 +24,10 @@ public class PagamentoService {
 
         WebClient webClient = WebClient.create("http://localhost:8080");
 
-    Mono<Usuario> pagadorMono = webClient.get()
-            .uri("/users/{username}", pagamento.getPagador())
-            .retrieve()
-            .bodyToMono(Usuario.class);
+//    Mono<Usuario> pagadorMono = webClient.get()
+//            .uri("/users/{username}", pagamento.getPagador())
+//            .retrieve()
+//            .bodyToMono(Usuario.class);
 
         Flux<Usuario> usuarios = webClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -42,15 +42,33 @@ public class PagamentoService {
 //
 //                    }
 
+//        Mono<Comprovante> comprovanteMono = Flux.zip(usuarios, usuarios.skip(1))
+//                .map(tupla -> new Transacao(
+//                        tupla.getT1().getUsername(),
+//                        tupla.getT2().getUsername(),
+//                        pagamento.getValor()))
+//                .last()
+//                .flatMap(tx -> transacaoRepository.save(tx))
+//                .map(tx -> tx.getComprovate())
+//                .flatMap(cmp -> {
+//                    return salvar(cmp);
+//                });
         Mono<Comprovante> comprovanteMono = Flux.zip(usuarios, usuarios.skip(1))
-                .map(tupla -> new Transacao(
-                        tupla.getT1().getUsername(),
-                        tupla.getT2().getUsername(),
-                        pagamento.getValor()))
+                .map(tupla -> {
+                            if(tupla.getT1().getBalance() < pagamento.getValor()){
+                                return null;
+                            }
+                            return new Transacao(
+                                    tupla.getT1().getUsername(),
+                                    tupla.getT2().getUsername(),
+                                    pagamento.getValor());
+                        }
+                )
                 .last()
                 .flatMap(tx -> transacaoRepository.save(tx))
-                .map(tx -> tx.getComprovate())
-                .flatMap(cmp -> {
+                .onErrorStop()
+                .map(tx -> tx.getComprovante())
+                .flatMap(cmp ->{
                     return salvar(cmp);
                 });
 
